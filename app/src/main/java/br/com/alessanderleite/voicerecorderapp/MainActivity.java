@@ -3,14 +3,26 @@ package br.com.alessanderleite.voicerecorderapp;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.widget.Chronometer;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Toolbar toolbar;
+    private Chronometer chronometer;
+    private ImageView imageViewRecord, imageViewPlay, imageViewStop;
+    private SeekBar seekBar;
+    private LinearLayout linearLayoutRecorder, linearLayoutPlay;
 
     private int RECORD_AUDIO_REQUEST_CODE = 123;
 
@@ -22,6 +34,27 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getPermissionToRecordAudio();
         }
+    }
+
+    private void initViews() {
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Voice Recorder");
+        toolbar.setTitleTextColor(getResources().getColor(android.R.color.black));
+        setSupportActionBar(toolbar);
+
+        linearLayoutRecorder = (LinearLayout) findViewById(R.id.linearLayoutRecorder);
+        chronometer = (Chronometer) findViewById(R.id.chronometerTime);
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        imageViewRecord = (ImageView) findViewById(R.id.imageViewRecord);
+        imageViewStop = (ImageView) findViewById(R.id.imageViewStop);
+        imageViewPlay = (ImageView) findViewById(R.id.imageViewPlay);
+        linearLayoutPlay = (LinearLayout) findViewById(R.id.linearLayoutPlay);
+        seekBar = (SeekBar) findViewById(R.id.seekBar);
+
+        imageViewRecord.setOnClickListener(this);
+        imageViewStop.setOnClickListener(this);
+        imageViewPlay.setOnClickListener(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
