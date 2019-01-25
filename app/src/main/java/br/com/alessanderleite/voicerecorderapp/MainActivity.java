@@ -164,4 +164,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //showing the play button
         imageViewPlay.setImageResource(R.drawable.ic_play);
     }
+
+    private void prepareforStop() {
+        TransitionManager.beginDelayedTransition(linearLayoutRecorder);
+        imageViewRecord.setVisibility(View.VISIBLE);
+        imageViewStop.setVisibility(View.GONE);
+        linearLayoutPlay.setVisibility(View.VISIBLE);
+    }
+
+    private void stopRecording() {
+        try {
+            mRecorder.stop();
+            mRecorder.release();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mRecorder = null;
+        //starting the chronometer
+        chronometer.stop();
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        //showing the play button
+        Toast.makeText(this, "Recording saved successfully.", Toast.LENGTH_SHORT).show();
+    }
 }
