@@ -110,7 +110,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (view == imageViewRecord) {
             prepareforRecording();
             startRecording();
+        } else if (view == imageViewStop) {
+            prepareforStop();
+            stopRecording();
         }
+    }
+
+    private void prepareforStop() {
+        TransitionManager.beginDelayedTransition(linearLayoutRecorder);
+        imageViewRecord.setVisibility(View.VISIBLE);
+        imageViewStop.setVisibility(View.GONE);
+        linearLayoutPlay.setVisibility(View.VISIBLE);
     }
 
     private void prepareforRecording() {
@@ -118,6 +128,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imageViewRecord.setVisibility(View.GONE);
         imageViewStop.setVisibility(View.VISIBLE);
         linearLayoutPlay.setVisibility(View.GONE);
+    }
+
+    private void stopPlaying() {
+        try {
+            mPlayer.release();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mPlayer = null;
+        //showing the play button
+        imageViewPlay.setImageResource(R.drawable.ic_play);
     }
 
     private void startRecording() {
@@ -152,24 +173,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //starting the chronometer
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
-    }
-
-    private void stopPlaying() {
-        try {
-            mPlayer.release();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        mPlayer = null;
-        //showing the play button
-        imageViewPlay.setImageResource(R.drawable.ic_play);
-    }
-
-    private void prepareforStop() {
-        TransitionManager.beginDelayedTransition(linearLayoutRecorder);
-        imageViewRecord.setVisibility(View.VISIBLE);
-        imageViewStop.setVisibility(View.GONE);
-        linearLayoutPlay.setVisibility(View.VISIBLE);
     }
 
     private void stopRecording() {
