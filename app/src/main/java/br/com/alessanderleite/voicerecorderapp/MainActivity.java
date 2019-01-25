@@ -2,7 +2,10 @@ package br.com.alessanderleite.voicerecorderapp;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.os.Build;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -10,6 +13,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageView;
@@ -17,7 +22,17 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private MediaRecorder mRecorder;
+    private MediaPlayer mPlayer;
+    private String fileName = null;
+    private int lastProgress = 0;
+    private Handler mHandler = new Handler();
+    private boolean isPlaying = false;
 
     private Toolbar toolbar;
     private Chronometer chronometer;
@@ -93,5 +108,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
+    }
+
+    private void prepareforRecording() {
+        TransitionManager.beginDelayedTransition(linearLayoutRecorder);
+        imageViewRecord.setVisibility(View.GONE);
+        imageViewStop.setVisibility(View.VISIBLE);
+        linearLayoutPlay.setVisibility(View.GONE);
+    }
+
+    private void startRecording() {
+        //we use the MediaRecorder class to record
+        mRecorder = new MediaRecorder();
+        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        /*In the lines below, we create a directory VoiceRecorderSimplifiedCoding/Audios in the Phone storage
+        * and the audios are being stored in the Audios folder */
+        File root = android.os.Environment.getExternalStorageDirectory();
+        File file = new File(root.getAbsolutePath() + "/VoiceRecorderSimplifiedCoding/Audio");
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        fileName = root.getAbsolutePath() + "/VoiceRecorderSimplifiedCoding/Audios/" +
+                String.valueOf(System.currentTimeMillis() + ".mp3");
+        Log.d("filename", fileName);
+        mRecorder.setOutputFile(fileName);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+        try {
+            mRecorder.prepare();
+            mRecorder.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        lastProgress = 0;
+        seekBar.setProgress(0);
+        stopPlaying();
+        //starting the chronometer
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.start();
+    }
+
+    private void stopPlaying() {
+        try {
+            mPlayer.release();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mPlayer = null;
+        //showing the play button
+        imageViewPlay.setImageResource(R.drawable.ic_play);
     }
 }
