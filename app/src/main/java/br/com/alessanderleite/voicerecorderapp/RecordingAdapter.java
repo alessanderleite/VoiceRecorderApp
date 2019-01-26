@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,8 +38,28 @@ public class RecordingAdapter extends RecyclerView.Adapter<RecordingAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+        setUpData(holder, position);
+    }
+
+    private void setUpData(ViewHolder holder, int position) {
+
+        Recording recording = recordingArrayList.get(position);
+        holder.textViewName.setText(recording.getFileName());
+
+        if (recording.isPlaying()) {
+            holder.imageViewPlay.setImageResource(R.drawable.ic_pause);
+            TransitionManager.beginDelayedTransition((ViewGroup) holder.itemView);
+            holder.seekBar.setVisibility(View.VISIBLE);
+            holder.seekUpdation(holder);
+        } else {
+            holder.imageViewPlay.setImageResource(R.drawable.ic_play);
+            TransitionManager.beginDelayedTransition((ViewGroup) holder.itemView);
+            holder.seekBar.setVisibility(View.GONE);
+        }
+
+        holder.manageSeekBar(holder);
     }
 
     @Override
