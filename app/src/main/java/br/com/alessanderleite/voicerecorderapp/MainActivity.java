@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /*In the lines below, we create a directory VoiceRecorderSimplifiedCoding/Audios in the Phone storage
         * and the audios are being stored in the Audios folder */
         File root = android.os.Environment.getExternalStorageDirectory();
-        File file = new File(root.getAbsolutePath() + "/VoiceRecorderSimplifiedCoding/Audio");
+        File file = new File(root.getAbsolutePath() + "/VoiceRecorderSimplifiedCoding/Audios");
         if (!file.exists()) {
             file.mkdirs();
         }

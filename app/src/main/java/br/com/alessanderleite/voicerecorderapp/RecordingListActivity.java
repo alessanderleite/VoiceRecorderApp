@@ -45,7 +45,7 @@ public class RecordingListActivity extends AppCompatActivity {
 
                 Log.d("Files", "FileName:" + files[i].getName());
                 String fileName = files[i].getName();
-                String recordingUri = root.getAbsolutePath() + "/VoiceRecorderSimplifiedCoding/Audios" + fileName;
+                String recordingUri = root.getAbsolutePath() + "/VoiceRecorderSimplifiedCoding/Audios/" + fileName;
 
                 Recording recording = new Recording(recordingUri, fileName, false);
                 recordingArrayList.add(recording);

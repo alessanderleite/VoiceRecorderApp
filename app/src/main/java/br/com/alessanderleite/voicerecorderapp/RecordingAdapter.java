@@ -3,7 +3,6 @@ package br.com.alessanderleite.voicerecorderapp;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.transition.TransitionManager;
 import android.util.Log;
@@ -30,15 +29,14 @@ public class RecordingAdapter extends RecyclerView.Adapter<RecordingAdapter.View
         this.recordingArrayList = recordingArrayList;
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.recording_item_layout, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
 
         setUpData(holder, position);
     }
@@ -48,18 +46,19 @@ public class RecordingAdapter extends RecyclerView.Adapter<RecordingAdapter.View
         Recording recording = recordingArrayList.get(position);
         holder.textViewName.setText(recording.getFileName());
 
-        if (recording.isPlaying()) {
+        if( recording.isPlaying() ){
             holder.imageViewPlay.setImageResource(R.drawable.ic_pause);
             TransitionManager.beginDelayedTransition((ViewGroup) holder.itemView);
             holder.seekBar.setVisibility(View.VISIBLE);
             holder.seekUpdation(holder);
-        } else {
+        }else{
             holder.imageViewPlay.setImageResource(R.drawable.ic_play);
             TransitionManager.beginDelayedTransition((ViewGroup) holder.itemView);
             holder.seekBar.setVisibility(View.GONE);
         }
 
         holder.manageSeekBar(holder);
+
     }
 
     @Override
@@ -78,7 +77,7 @@ public class RecordingAdapter extends RecyclerView.Adapter<RecordingAdapter.View
         ViewHolder holder;
 
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
 
             imageViewPlay = (ImageView) itemView.findViewById(R.id.imageViewPlay);
