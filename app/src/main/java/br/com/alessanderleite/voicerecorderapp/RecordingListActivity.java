@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
@@ -27,6 +26,8 @@ public class RecordingListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recording_list);
 
+        recordingArrayList = new ArrayList<Recording>();
+
         initViews();
         fetchRecordings();
     }
@@ -34,7 +35,7 @@ public class RecordingListActivity extends AppCompatActivity {
     private void fetchRecordings() {
 
         File root = android.os.Environment.getExternalStorageDirectory();
-        String path = root.getAbsolutePath() + "/VoiceRecorderSimplifiedCoding/Audios";
+        String path = root.getAbsolutePath() + "/VoiceRecorder/Audios";
         Log.d("Files", "Path: " + path);
         File directory = new File(path);
         File[] files = directory.listFiles();
@@ -45,7 +46,7 @@ public class RecordingListActivity extends AppCompatActivity {
 
                 Log.d("Files", "FileName:" + files[i].getName());
                 String fileName = files[i].getName();
-                String recordingUri = root.getAbsolutePath() + "/VoiceRecorderSimplifiedCoding/Audios/" + fileName;
+                String recordingUri = root.getAbsolutePath() + "/VoiceRecorder/Audios/" + fileName;
 
                 Recording recording = new Recording(recordingUri, fileName, false);
                 recordingArrayList.add(recording);
