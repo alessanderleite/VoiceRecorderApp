@@ -27,6 +27,7 @@ public class RecordingListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recording_list);
 
         initViews();
+        fetchRecordings()
     }
 
     private void fetchRecordings() {
@@ -58,7 +59,12 @@ public class RecordingListActivity extends AppCompatActivity {
             recyclerViewRecordings.setVisibility(View.GONE);
         }
     }
-    
+
+    private void setAdapterToRecyclerView() {
+        recordingAdapter = new RecordingAdapter(this, recordingArrayList);
+        recyclerViewRecordings.setAdapter(recordingAdapter);
+    }
+
     private void initViews() {
         recordingArrayList = new ArrayList<>();
 
