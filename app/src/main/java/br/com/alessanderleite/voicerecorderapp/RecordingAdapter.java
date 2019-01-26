@@ -63,6 +63,39 @@ public class RecordingAdapter extends RecyclerView.Adapter<RecordingAdapter.View
             imageViewPlay = (ImageView) itemView.findViewById(R.id.imageViewPlay);
             seekBar = (SeekBar) itemView.findViewById(R.id.seekBar);
             textViewName = (TextView) itemView.findViewById(R.id.textViewRecordingName);
+
+            imageViewPlay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    Recording recording = recordingArrayList.get(position);
+
+                    recordingUri = recording.getUri();
+
+                    if (isPlaying) {
+                        stopPlaying();
+                        if (position == last_index) {
+                            recording.setPlaying(false);
+                            stopPlaying();
+                            notifyItemChanged(position);
+                        } else {
+                            markAllPaused();
+                            recording.setPlaying(true);
+                            notifyItemChanged(position);
+                            startPlaying(recording, position);
+                            last_index = position;
+                        }
+                    } else {
+                        startPlaying(recording, position);
+                        recording.setPlaying(true);
+                        seekBar.setMax(mPlayer.getDuration());
+                        Log.d("isPlaying", "False");
+
+                        notifyItemChanged(position);
+                        last_index = position;
+                    }
+                }
+            });
         }
 
         public void manageSeekBar(ViewHolder holder) {
