@@ -189,4 +189,69 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //showing the play button
         Toast.makeText(this, "Recording saved successfully.", Toast.LENGTH_SHORT).show();
     }
+
+    private void startPlaying() {
+        mPlayer = new MediaPlayer();
+        try {
+            mPlayer.setDataSource(fileName);
+            mPlayer.prepare();;
+            mPlayer.start();
+        } catch (IOException e) {
+            Log.e("LOG_TAG", "prepare() failed");
+        }
+
+        imageViewPlay.setImageResource(R.drawable.ic_pause);
+
+        seekBar.setProgress(lastProgress);
+        mPlayer.seekTo(lastProgress);
+        seekBar.setMax(mPlayer.getDuration());
+        seekUpdation();
+        chronometer.start();
+
+        mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                imageViewPlay.setImageResource(R.drawable.ic_play);
+                isPlaying = false;
+                chronometer.stop();
+            }
+        });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (mPlayer != null && fromUser) {
+                    mPlayer.seekTo(progress);
+                    chronometer.setBase(SystemClock.elapsedRealtime() - mPlayer.getCurrentPosition());
+                    lastProgress = progress;
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            seekUpdation();
+        }
+    };
+
+    private void seekUpdation() {
+        if (mPlayer != null) {
+            int mCurrrentPosition = mPlayer.getCurrentPosition();
+            seekBar.setProgress(mCurrrentPosition);
+            lastProgress = mCurrrentPosition;
+        }
+        mHandler.postDelayed(runnable, 100);
+    }
 }
