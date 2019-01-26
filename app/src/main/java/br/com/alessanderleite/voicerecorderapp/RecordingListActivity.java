@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,7 +28,7 @@ public class RecordingListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recording_list);
 
         initViews();
-        fetchRecordings()
+        fetchRecordings();
     }
 
     private void fetchRecordings() {
@@ -82,4 +83,17 @@ public class RecordingListActivity extends AppCompatActivity {
         textViewNoRecordings = (TextView) findViewById(R.id.textViewNoRecordings);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                this.finish();
+                return true;
+                
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
