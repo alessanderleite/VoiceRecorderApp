@@ -91,7 +91,7 @@ public class RecordingListActivity extends AppCompatActivity {
             case android.R.id.home:
                 this.finish();
                 return true;
-                
+
             default:
                 return super.onOptionsItemSelected(item);
         }
